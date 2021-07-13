@@ -7,21 +7,18 @@ import ThoughtForm from '../components/ThoughtForm';
 
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_USER, QUERY_ME } from '../utils/queries';
-import Auth from '../utils/auth';
-
 import { ADD_FRIEND } from '../utils/mutations';
-
+import Auth from '../utils/auth';
 
 const Profile = () => {
   const { username: userParam } = useParams();
 
+  const [addFriend] = useMutation(ADD_FRIEND);
   const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME, {
     variables: { username: userParam }
   });
 
   const user = data?.me || data?.user || {};
-
-  const [addFriend] = useMutation(ADD_FRIEND);
 
   // redirect to personal profile page if username is the logged-in user's
   if (Auth.loggedIn() && Auth.getProfile().data.username === userParam) {
